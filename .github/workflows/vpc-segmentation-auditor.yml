@@ -1,0 +1,92 @@
+name: vpc-segmentation-auditor
+
+# Runs on any push or pull request that touches files in this lab.
+on:
+  push:
+    paths:
+      - "vpc-segmentation-auditor/**"
+      - ".github/workflows/vpc-segmentation-auditor.yml"
+  pull_request:
+    paths:
+      - "vpc-segmentation-auditor/**"
+      - ".github/workflows/vpc-segmentation-auditor.yml"
+
+defaults:
+  run:
+    working-directory: vpc-segmentation-auditor
+
+jobs:
+  # ---------------------------------------------------------------------------
+  # Job 1: Terraform lint
+  #
+  # tfsec and checkov will flag the intentional misconfigurations in this lab
+  # (open SSH/RDP, no flow logs, wildcard IAM). That is expected and correct.
+  # continue-on-error: true lets the pipeline keep running so the Python tests
+  # and pip-audit jobs still execute. The findings are visible in the job logs.
+  # ---------------------------------------------------------------------------
+  terraform-lint:
+    name: Terraform Lint
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: tfsec
+        uses: aquasecurity/tfsec-action@v1.0.0
+        with:
+          working_directory: vpc-segmentation-auditor/terraform
+        continue-on-error: true
+
+      - name: checkov
+        uses: bridgecrewio/checkov-action@v12
+        with:
+          directory: vpc-segmentation-auditor/terraform
+          framework: terraform
+          quiet: true
+        continue-on-error: true
+
+  # ---------------------------------------------------------------------------
+  # Job 2: Python tests
+  #
+  # Runs the full pytest suite using moto to mock AWS. No AWS credentials
+  # needed - all API calls are intercepted and handled in memory.
+  # ---------------------------------------------------------------------------
+  python-tests:
+    name: Python Tests
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: pip install -r scripts/requirements.txt
+
+      - name: Run tests
+        run: pytest tests/ -v
+
+  # ---------------------------------------------------------------------------
+  # Job 3: Dependency security scan
+  #
+  # pip-audit checks requirements.txt against known CVE databases.
+  # Flags any packages with known vulnerabilities.
+  # ---------------------------------------------------------------------------
+  security-scan:
+    name: Dependency Security Scan
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install pip-audit
+        run: pip install pip-audit
+
+      - name: Scan dependencies
+        run: pip-audit -r scripts/requirements.txt

@@ -1,0 +1,5 @@
+# Copy this file to terraform.tfvars and adjust as needed.
+# terraform.tfvars is gitignored — never commit AWS account-specific values.
+
+region       = "us-east-1"
+project_name = "vpc-seg-lab"
