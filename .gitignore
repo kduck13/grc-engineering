@@ -22,6 +22,15 @@ credentials
 
 # Claude
 CLAUDE.md
+.claude/
+
+# Tutor system - private learning state (except contract)
+.tutor/*
+!.tutor/TUTOR_CONTRACT.md
+
+# Temp files
+files.zip
+.tutor-temp/
 
 # OS
 .DS_Store

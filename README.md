@@ -1,6 +1,6 @@
-# AWS GRC Engineering
+# GRC Engineering
 
-I'm using this repo to build GRC engineering projects alongside the Cantrill AWS Security Specialty course. Each project takes a concept from the course and turns it into something I can actually run - a scanner, a policy enforcement tool, or an automated audit workflow.
+I'm using this repo to build GRC engineering projects that turn security and compliance concepts into real tools. Each project takes a concept from a course, from work, or from curiosity and turns it into something I can actually run - a scanner, a policy enforcement tool, or an automated audit workflow.
 
 ## Projects
 
