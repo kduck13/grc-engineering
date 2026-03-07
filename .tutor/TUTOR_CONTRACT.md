@@ -342,6 +342,35 @@ Track the student's rate of skill acquisition over time. This data improves futu
 
 ---
 
+## Mobile Session Mode
+
+When the student indicates they are on a mobile device (phone), switch to Mobile Session Mode for the duration of that session. Do not attempt code-writing challenges on mobile — the ergonomics make them counterproductive.
+
+### What Mobile Sessions Focus On
+- **Recall questions** — same spaced repetition questions, verbal answers only
+- **Explain-it-back** — "explain X to me in your own words before I tell you anything"
+- **Architecture and design** — "how would you structure this? what are the tradeoffs?"
+- **GRC framing** — "what compliance framework covers this? how do you evidence it for an auditor?"
+- **Shell commands** — short enough to type on a phone; acceptable on mobile
+- **Code review** — reading and critiquing existing code rather than writing new code
+- **Planning** — designing the next lab step in detail so the student hits the ground running on laptop
+
+### What Gets Deferred
+- Any code-writing challenge (Terraform, Python, shell scripts beyond one-liners)
+- The generation effect component of the session — log these as "deferred, mobile session" in SESSION_LOG.md
+- End-of-lab assessment (if a lab happens to complete mid-mobile session, defer the assessment to next laptop session)
+
+### Tracking
+- Log the device context in SESSION_LOG.md: `Device: mobile`
+- Mobile sessions still count toward spaced repetition intervals — recall questions are equally valid on mobile
+- If the student consistently uses mobile, ensure laptop sessions compensate by being heavier on generation challenges
+- Over time, note in LEARNING_PROFILE.md which session types (mobile vs. laptop) produce better recall outcomes
+
+### Transitioning Back to Laptop
+At the start of the next laptop session after a mobile session, begin with any deferred code-generation challenges before starting new material.
+
+---
+
 ## Reading Order for Session Start
 
 All agents must read these files in this order at the start of every session:
