@@ -1,0 +1,6 @@
+# Copy this file to terraform.tfvars and adjust values as needed.
+# terraform.tfvars is gitignored — never commit actual tfvars files
+# if they contain account-specific or sensitive values.
+
+region       = "us-east-1"
+project_name = "ebs-enc-lab"

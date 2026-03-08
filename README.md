@@ -7,6 +7,7 @@ I'm using this repo to build GRC engineering projects that turn security and com
 | Lab | Description | Controls |
 |---|---|---|
 | [vpc-segmentation-auditor](./vpc-segmentation-auditor/) | Python/boto3 compliance scanner for VPC network segmentation. Deploys intentionally misconfigured Terraform infrastructure and finds it. | CIS 1.16, 2.9, 5.2, 5.3 / SOC2 CC6.x / ISO 27001 A.9/A.12/A.13 |
+| [ebs-encryption-auditor](./ebs-encryption-auditor/) | Python/boto3 compliance scanner for EBS encryption posture. Audits account-level defaults, per-volume CMK usage, snapshot encryption, and instances with unencrypted volumes. | CIS 2.3.1 / SOC2 CC6.1, CC6.7 / ISO 27001 A.10.1.1 / PCI DSS 3.4 / HIPAA |
 
 ## Stack
 

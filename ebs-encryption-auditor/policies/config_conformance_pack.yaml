@@ -1,0 +1,53 @@
+# EBS Encryption Conformance Pack
+#
+# Documents the AWS Config managed rules used in this lab, grouped by
+# compliance framework. Rules are deployed via Terraform in config_rules.tf.
+#
+# In production, this would be deployed as an AWS Config conformance pack
+# across an AWS Organization to enforce encryption controls at scale.
+# See: https://docs.aws.amazon.com/config/latest/developerguide/conformance-packs.html
+#
+# Controls NOT covered by AWS managed rules (covered by Python scanner):
+#   - Per-volume CMK check (aws/ebs vs customer-managed key)
+#   - Snapshot encryption (no managed Config rule exists for this)
+#   - Instance-to-volume mapping (require cross-resource logic)
+# The scanner in scripts/scanner.py fills these gaps with boto3-based checks.
+
+Parameters:
+  ProjectName:
+    Type: String
+    Default: ebs-enc-lab
+
+Resources:
+
+  # ─────────────────────────────────────────────────────────────────────────
+  # CIS AWS Foundations Benchmark 2.3.1
+  # ─────────────────────────────────────────────────────────────────────────
+
+  # Account-level EBS encryption by default must be enabled.
+  # Preventive: all NEW volumes created after this is enabled are encrypted.
+  CIS231EbsEncryptionByDefault:
+    Type: AWS::Config::ConfigRule
+    Properties:
+      ConfigRuleName: !Sub "${ProjectName}-ebs-encryption-by-default"
+      Description: >
+        CIS 2.3.1 | SOC2 CC6.1 | ISO A.10.1.1 —
+        EBS encryption must be enabled by default at the account level.
+        Evaluates: AWS::EC2::EncryptionByDefault
+      Source:
+        Owner: AWS
+        SourceIdentifier: EC2_EBS_ENCRYPTION_BY_DEFAULT
+
+  # All existing EBS volumes must be encrypted.
+  # Detective: catches volumes that predate the account-level default setting.
+  CIS231EncryptedVolumes:
+    Type: AWS::Config::ConfigRule
+    Properties:
+      ConfigRuleName: !Sub "${ProjectName}-encrypted-volumes"
+      Description: >
+        CIS 2.3.1 | PCI DSS 3.4 | HIPAA —
+        EBS volumes must be encrypted at rest.
+        Evaluates: AWS::EC2::Volume
+      Source:
+        Owner: AWS
+        SourceIdentifier: ENCRYPTED_VOLUMES
