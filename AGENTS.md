@@ -31,11 +31,8 @@ to the technology but always includes:
 
 ```
 <lab-name>/
-├── README.md        # Purpose, architecture, intentional misconfigs,
-│                    # control mappings, audit evidence, estimated cost,
-│                    # and teardown instructions
-├── terraform/       # IaC (or equivalent) — deploys intentionally
-│                    # misconfigured infrastructure
+├── README.md        # Follow the README template below
+├── terraform/       # IaC (or equivalent) — deploys intentionally misconfigured infrastructure
 ├── scripts/         # Compliance scanner and finding output
 ├── tests/           # Automated tests with no real infrastructure calls
 └── policies/        # Policy-as-code (Config rules, OPA, SCPs, etc.)
@@ -44,6 +41,64 @@ to the technology but always includes:
 Adapt the tooling to the technology being studied. For AWS labs use
 Terraform + Python/boto3 + pytest/moto + GitHub Actions. For other platforms,
 use the equivalent idiomatic tools.
+
+### README Template
+
+Every lab README must follow this structure:
+
+```markdown
+# <Lab Name>
+
+<1-2 sentence origin — why this lab exists, what real-world scenario it models>
+
+## What This Does
+
+- <what infrastructure is deployed>
+- <what the scanner checks>
+- <what monitoring or policy-as-code is included>
+- <what the test suite covers>
+
+## Architecture
+
+<ASCII diagram or table showing deployed resources and intentional misconfigs>
+
+## Intentional Misconfigurations
+
+| Resource | Misconfiguration | Controls Violated |
+|---|---|---|
+
+## GRC Controls Covered
+
+| Check | <Framework 1> | <Framework 2> | Severity |
+|---|---|---|---|
+
+## Prerequisites
+
+- <tooling versions>
+- <permissions needed>
+- **Cost note:** <estimated cost and destroy instructions>
+
+## Quick Start
+
+<bash: deploy, run scanner, run tests, destroy>
+
+## Running Tests
+
+<how to run without real infrastructure>
+
+## CI/CD
+
+<what the pipeline does — note any expected failures from intentional misconfigs>
+
+## Key Design Decisions
+
+<3-5 bullets: non-obvious choices, what a production version would look like,
+what the lab intentionally simplifies>
+
+## What I Learned Building This
+
+<honest reflection on what was new, surprising, or worth remembering>
+```
 
 ## Every Lab Must
 
